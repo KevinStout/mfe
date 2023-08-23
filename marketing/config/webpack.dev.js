@@ -1,7 +1,8 @@
 const { merge } = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const commonConfig = require('./webpack.common');
+const packageJson = require('../package.json');
+const { dependencies } = require('webpack');
 
 const devConfig = {
   mode: 'development',
@@ -18,13 +19,8 @@ const devConfig = {
       exposes: {
         './MarketingApp': './src/bootstrap',
       },
-      shared: [
-        'react',
-        'react-dom',
-      ],
-    }),
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
+      // This is a way to share all dependencies and not have to manually update the list.
+      shared: packageJson.dependencies,
     }),
   ],
 };
